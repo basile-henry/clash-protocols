@@ -134,15 +134,21 @@ library
       -- To be removed; we need 'Test.Tasty.Hedgehog.Extra' to fix upstream issues
     , tasty >= 1.2 && < 1.5
     , tasty-hedgehog
+    , strict-tuple
 
   exposed-modules:
     Protocols
+
+    Protocols.Axi4.Common
+    Protocols.Axi4.Lite.Axi4Lite
+
     Protocols.Df
     Protocols.DfLike
     Protocols.Hedgehog
     Protocols.Hedgehog.Internal
     Protocols.Internal
     Protocols.Plugin
+
 
     -- 'testProperty' is broken upstream, it reports wrong test names
     -- TODO: test / upstream ^
