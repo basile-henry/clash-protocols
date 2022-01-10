@@ -141,6 +141,7 @@ library
 
     Protocols.Axi4.Common
     Protocols.Axi4.Lite.Axi4Lite
+    Protocols.Axi4.Lite.Example
 
     Protocols.Df
     Protocols.DfLike
@@ -148,6 +149,7 @@ library
     Protocols.Hedgehog.Internal
     Protocols.Internal
     Protocols.Plugin
+    Protocols.TwoWayDf
 
 
     -- 'testProperty' is broken upstream, it reports wrong test names

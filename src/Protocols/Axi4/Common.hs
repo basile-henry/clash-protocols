@@ -102,7 +102,7 @@ type family LockType (keepLockType :: KeepLock) where
 
 -- | Enables or disables 'Privileged', 'Secure', and 'InstructionOrData'
 type family PermissionsType (keepPermissions :: KeepPermissions) where
-  PermissionsType 'KeepPermissions = T3 Privileged Secure InstructionOrData
+  PermissionsType 'KeepPermissions = (Privileged, Secure, InstructionOrData)
   PermissionsType 'NoPermissions = ()
 
 -- | Enables or disables 'Qos'
@@ -273,12 +273,14 @@ data Modifiable
 data Secure
   = Secure
   | NonSecure
+  deriving (Show, Generic, C.NFDataX)
 
 -- | An AXI master might support more than one level of operating privilege,
 -- and extend this concept of privilege to memory access.
 data Privileged
   = NotPrivileged
   | Privileged
+  deriving (Show, Generic, C.NFDataX)
 
 -- | Whether the transaction is an instruction access or a data access. The AXI
 -- protocol defines this indication as a hint. It is not accurate in all cases,
@@ -289,3 +291,4 @@ data Privileged
 data InstructionOrData
   = Data
   | Instruction
+  deriving (Show, Generic, C.NFDataX)
