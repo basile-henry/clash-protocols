@@ -141,7 +141,6 @@ library
 
     Protocols.Axi4.Common
     Protocols.Axi4.Lite.Axi4Lite
-    Protocols.Axi4.Lite.Example
 
     Protocols.Df
     Protocols.DfLike
