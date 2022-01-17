@@ -23,6 +23,7 @@ type family WriteBusWidthType (bw :: BusWidth) where
   WriteBusWidthType 'Width32 = C.Vec 4 (Maybe (C.BitVector 8))
   WriteBusWidthType 'Width64 = C.Vec 8 (Maybe (C.BitVector 8))
 
+-- | Type family mapping the two available bus widths to vectors of bytes.
 type family ReadBusWidthType (bw :: BusWidth) where
   ReadBusWidthType 'Width32 = C.Vec 4 (C.BitVector 8)
   ReadBusWidthType 'Width64 = C.Vec 8 (C.BitVector 8)
@@ -50,11 +51,13 @@ data M2S_WriteAddress
 deriving instance (C.KnownNat (Width aw))
   => Show (M2S_WriteAddress aw)
 
+-- | Ready signal for the write address channel.
 data S2M_WriteAddress
   = S2M_WriteAddress {
     _awready :: Bool
   } deriving (Show, Generic, NFDataX)
 
+-- | Protocol type for the write address channel.
 data Axi4LiteWA
   (dom :: C.Domain)
   (aw :: AddrWidth)
@@ -68,6 +71,7 @@ instance Protocol (Axi4LiteWA dom aw) where
 --- Write data types ---
 ------------------------
 
+-- | Data type for the write data channel.
 data M2S_WriteData
   (bw :: BusWidth)
   = M2S_NoWriteData
@@ -83,11 +87,13 @@ deriving instance
 
 deriving instance (NFDataX (WriteBusWidthType bw)) => NFDataX (M2S_WriteData bw)
 
+-- | Ready signal for the write data channel.
 data S2M_WriteData
   = S2M_WriteData {
     _wready :: Bool
   } deriving (Show, Generic, NFDataX)
 
+-- | Protocol type for the write data channel
 data Axi4LiteWD
   (dom :: C.Domain)
   (bw :: BusWidth)
@@ -101,17 +107,22 @@ instance Protocol (Axi4LiteWD dom bw) where
 --- Write response types ---
 ----------------------------
 
+-- | Data type for the write response channel. Notice that here the ready signal
+-- goes from master to slave instead of the other way around.
 data M2S_WriteResponse
   = M2S_WriteResponse {
     _bready :: Bool
   } deriving (Show, Generic, NFDataX)
 
+-- | Data type for the write response channel from slave to master. On this channel
+-- the response as defined in A3.4.4 is sent.
 data S2M_WriteResponse
   = S2M_NoWriteResponse
   | S2M_WriteResponse {
     _bresp :: RespLite
   } deriving (Show, Generic, NFDataX)
 
+-- | Protocol type for the write response channel.
 data Axi4LiteWR
   (dom :: C.Domain)
 
@@ -124,6 +135,7 @@ instance Protocol (Axi4LiteWR dom) where
 --- Read address types ---
 --------------------------
 
+-- | Data type for the read address channel.
 data M2S_ReadAddress
   (aw :: AddrWidth)
   = M2S_NoReadAddress
@@ -136,12 +148,13 @@ deriving instance
   (C.KnownNat (Width aw))
   => Show (M2S_ReadAddress aw)
 
-
+-- | Ready signal for the read address channel.
 data S2M_ReadAddress
   = S2M_ReadAddress {
     _arready :: Bool
   } deriving (Show, Generic, NFDataX)
 
+-- | Protocol type for the read address channel.
 data Axi4LiteRA
   (dom :: C.Domain)
   (aw :: AddrWidth)
@@ -156,15 +169,17 @@ instance Protocol (Axi4LiteRA dom aw) where
 -----------------------
 
 -- | Acknowledges data from the slave component. This data type needs the 'bw' type
--- to fullfil the injectivity requirement of 'Fwd' in 'Protocol'.
+-- to fullfil the injectivity requirement of 'Fwd' in 'Protocol', even though it only
+-- contains a ready signal of type 'Bool'.
 data M2S_ReadData
-  (bw :: BusWidth) -- Necessary for the injectivity requirement of Fwd
+  (bw :: BusWidth)
   = M2S_ReadData {
     _rready :: Bool
   } deriving (Generic, NFDataX)
 
 deriving instance (Show (ReadBusWidthType bw)) => Show (M2S_ReadData bw)
 
+-- | Data type for the data sent over the read data channel from the slave to the master.
 data S2M_ReadData
   (bw :: BusWidth)
   = S2M_NoReadData
@@ -176,6 +191,7 @@ data S2M_ReadData
 deriving instance (Show (ReadBusWidthType bw)) => Show (S2M_ReadData bw)
 deriving instance (NFDataX (ReadBusWidthType bw)) => NFDataX (S2M_ReadData bw)
 
+-- | Protocol type for the read data channel.
 data Axi4LiteRD
   (dom :: C.Domain)
   (bw :: BusWidth)
