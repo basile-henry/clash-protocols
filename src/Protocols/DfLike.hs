@@ -864,7 +864,9 @@ stall ::
   Proxy (df a) ->
   SimulationConfig ->
   -- | Acknowledgement to send when LHS does not send data. Stall will act
-  -- transparently when reset is asserted.
+  -- transparently when reset is asserted. A correct circuit would nack during reset,
+  -- however since "stall" is used to debug other components it acts transparently as
+  -- otherwise it may occlude the behavior of the components under test.
   StallAck ->
   -- Number of cycles to stall for every valid Df packet
   [Int] ->
