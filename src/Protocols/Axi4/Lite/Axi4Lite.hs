@@ -12,6 +12,7 @@ import Protocols
 import Protocols.Axi4.Common
 import Clash.Prelude as C
 
+import Control.DeepSeq
 
 -- | AXI4 Lite busses are always either 32 bit or 64 bit.
 data BusWidth = Width32 | Width64 deriving (Show, Eq)
@@ -46,10 +47,16 @@ data M2S_WriteAddress
 
     -- | Protection permissions, in AXI4 Lite these are always enabled.
     _awprot :: PermissionsType 'KeepPermissions
-  } deriving (Generic, NFDataX)
+  } deriving (Generic, NFDataX, NFData)
 
 deriving instance (C.KnownNat (Width aw))
   => Show (M2S_WriteAddress aw)
+
+deriving instance (C.KnownNat (Width aw))
+  => ShowX (M2S_WriteAddress aw)
+
+deriving instance (C.KnownNat (Width aw))
+  => Eq (M2S_WriteAddress aw)
 
 -- | Ready signal for the write address channel.
 data S2M_WriteAddress

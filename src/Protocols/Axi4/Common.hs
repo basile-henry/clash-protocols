@@ -18,6 +18,8 @@ import Clash.Prelude (type (^), type (-), type (*))
 -- strict-tuple
 import Data.Tuple.Strict (T4)
 
+import Control.DeepSeq
+
 -- | Simple wrapper to achieve "named arguments" when instantiating an AXI protocol
 data IdWidth = IdWidth Nat deriving (Show, Eq)
 
@@ -273,14 +275,14 @@ data Modifiable
 data Secure
   = Secure
   | NonSecure
-  deriving (Show, Generic, C.NFDataX)
+  deriving (Show, Generic, C.NFDataX, NFData, C.ShowX, Eq)
 
 -- | An AXI master might support more than one level of operating privilege,
 -- and extend this concept of privilege to memory access.
 data Privileged
   = NotPrivileged
   | Privileged
-  deriving (Show, Generic, C.NFDataX)
+  deriving (Show, Generic, C.NFDataX, NFData, C.ShowX, Eq)
 
 -- | Whether the transaction is an instruction access or a data access. The AXI
 -- protocol defines this indication as a hint. It is not accurate in all cases,
@@ -291,4 +293,4 @@ data Privileged
 data InstructionOrData
   = Data
   | Instruction
-  deriving (Show, Generic, C.NFDataX)
+  deriving (Show, Generic, C.NFDataX, NFData, C.ShowX, Eq)
